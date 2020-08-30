@@ -1,11 +1,33 @@
 //
 //
-
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Post from './Post';
 
 function App() {
+  const [posts, setPosts] = useState([
+    {
+      username: 'Test1',
+      caption: 'Beagle Pic 1',
+      imageUrl:
+        'https://images.pexels.com/photos/2305001/pexels-photo-2305001.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      alt: '1',
+    },
+    {
+      username: 'Test2',
+      caption: 'Beagle Pic 2',
+      imageUrl:
+        'https://images.pexels.com/photos/1031431/pexels-photo-1031431.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      alt: '2',
+    },
+    {
+      username: 'Test3',
+      caption: 'Beagle Pic 3',
+      imageUrl:
+        'https://images.pexels.com/photos/4084420/pexels-photo-4084420.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+      alt: '3',
+    },
+  ]);
   return (
     <div className='app'>
       <div className='app__header'>
@@ -15,21 +37,14 @@ function App() {
           alt='instagram'
         />
       </div>
-      <Post
-        username='Bozo Boy'
-        caption='WOW it works'
-        imageURL='https://images.pexels.com/photos/879788/pexels-photo-879788.jpeg?cs=srgb&dl=pexels-artem-beliaikin-879788.jpg&fm=jpg'
-      />
-      <Post
-        username='Bozo Dog'
-        caption='What up Dog'
-        imageURL='https://images.pexels.com/photos/879788/pexels-photo-879788.jpeg?cs=srgb&dl=pexels-artem-beliaikin-879788.jpg&fm=jpg'
-      />
-      <Post
-        username='Bozo Girl'
-        caption='What Up Girl'
-        imageURL='https://images.pexels.com/photos/879788/pexels-photo-879788.jpeg?cs=srgb&dl=pexels-artem-beliaikin-879788.jpg&fm=jpg'
-      />
+      {posts.map((post) => (
+        <Post
+          username={post.username}
+          caption={post.caption}
+          imageUrl={post.imageUrl}
+          alt={post.alt}
+        />
+      ))}
     </div>
   );
 }
