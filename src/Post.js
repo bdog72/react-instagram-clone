@@ -11,6 +11,7 @@ function Post({ username, caption, imageUrl, alt }) {
       <div className='post__header'>
         <Avatar
           className='post__avatar'
+          // alt='B'
           alt={alt}
           src='/static/images/avatar/1.jpg'
         />
