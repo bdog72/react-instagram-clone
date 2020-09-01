@@ -11,9 +11,18 @@ body {
   background-color: #fafafa;
 }
 
+center p {
+  margin: 0;
+}
+
 .app__header {
   background-color: #fff;
   padding: 20px;
   border-bottom: 1px solid #d3d3d3;
   object-fit: contain;
+}
+
+.app__signup {
+  display: flex;
+  flex-direction: column;
 }
