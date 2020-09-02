@@ -12,6 +12,8 @@ import { Modal, Button, Input } from '@material-ui/core';
 import { auth } from './firebase';
 import ImageUpload from './ImageUpload';
 
+import InstagramEmbed from 'react-instagram-embed';
+
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -61,9 +63,13 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection('posts').onSnapshot((snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
-    });
+    db.collection('posts')
+      .orderBy('timestamp', 'desc')
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      });
   }, []);
 
   const signUp = (event) => {
@@ -92,8 +98,6 @@ function App() {
 
   return (
     <div className='app'>
-      <ImageUpload />
-
       {/* ***** - Modal - ***** */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
@@ -165,67 +169,73 @@ function App() {
 
       {/* ////////// */}
       <div className='app__header'>
-        <img
-          className='app__headerImage'
-          src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
-          alt='instagram'
-        />
-      </div>
-      <center>
-        <p>test1</p>
-        <p>test1@gmail.com</p>
-        <p>test1234</p>
-        <p>---------------</p>
-      </center>
-      <center>
-        <p>test2</p>
-        <p>test2@gmail.com</p>
-        <p>test1234</p>
-      </center>
-
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Logout</Button>
-      ) : (
-        <div className='app__loginContainer'>
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        <div>
+          <img
+            className='app__headerImage'
+            src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
+            alt='instagram'
+          />
         </div>
-      )}
+        <div>
+          {user ? (
+            <Button onClick={() => auth.signOut()}>Logout</Button>
+          ) : (
+            <div className='app__loginContainer'>
+              <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+              <Button onClick={() => setOpen(true)}>Sign Up</Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className='app__dummyData'>
+        <center>
+          <p>test1</p>
+          <p>test1@gmail.com</p>
+          <p>test1234</p>
+        </center>
+        <center>
+          <p>test2</p>
+          <p>test2@gmail.com</p>
+          <p>test1234</p>
+        </center>
+      </div>
 
       {/* ////////// */}
 
-      {posts.map(({ post, id }) => (
-        <Post
-          username={post.username}
-          caption={post.caption}
-          imageUrl={post.imageUrl}
-          alt={post.alt}
-        />
-      ))}
+      <div className='app__posts'>
+        <div className='app__postsLeft'>
+          {posts.map(({ post, id }) => (
+            <Post
+              username={post.username}
+              caption={post.caption}
+              imageUrl={post.imageUrl}
+              alt={post.alt}
+            />
+          ))}
+        </div>
+
+        <div className='app__postsRight'>
+          <InstagramEmbed
+            url='https://instagr.am/p/Zw9o4/'
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName='div'
+            protocol=''
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
+      </div>
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h3>Sorry You need to Login to Upload</h3>
+      )}
     </div>
   );
 }
 
 export default App;
-
-// {
-//   username: 'Test1',
-//   caption: 'Beagle Pic 1',
-//   imageUrl:
-//     'https://images.pexels.com/photos/2305001/pexels-photo-2305001.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-//   alt: '1',
-// },
-// {
-//   username: 'Test2',
-//   caption: 'Beagle Pic 2',
-//   imageUrl:
-//     'https://images.pexels.com/photos/1031431/pexels-photo-1031431.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-//   alt: '2',
-// },
-// {
-//   username: 'Test3',
-//   caption: 'Beagle Pic 3',
-//   imageUrl:
-//     'https://images.pexels.com/photos/4084420/pexels-photo-4084420.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-//   alt: '3',
-// },
